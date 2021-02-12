@@ -1,4 +1,4 @@
-require('dotenv').config()
+require("dotenv").config();
 
 const mongoose = require("mongoose");
 const express = require("express");
@@ -7,35 +7,34 @@ const bodyParser = require("body-parser");
 const cookieParser = require("cookie-parser");
 const cors = require("cors");
 
-
 //My routes
-const authRoutes = require("./routes/auth")
-const userRoutes = require("./routes/user")
-const categoryRoutes = require("./routes/category")
-const productRoutes = require("./routes/product")
-const orderRoutes = require("./routes/order")
-
+const authRoutes = require("./routes/auth");
+const userRoutes = require("./routes/user");
+const categoryRoutes = require("./routes/category");
+const productRoutes = require("./routes/product");
+const orderRoutes = require("./routes/order");
+const stripeRoutes = require("./routes/stripepayment");
 
 // mongoose.connect('mongodb://localhost:27017/myapp', {useNewUrlParser: true});
 
-
 //DB Connection
-mongoose.connect(process.env.DATABASE, {
+mongoose
+  .connect(process.env.DATABASE, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
-    useCreateIndex: true
-}).then(()=>{
+    useCreateIndex: true,
+  })
+  .then(() => {
     console.log("DB CONNECTED");
-}).catch(()=>{
+  })
+  .catch(() => {
     console.log("DB NOT CONNECTED");
-})
-
+  });
 
 //Middlewares
 app.use(bodyParser.json());
 app.use(cookieParser());
 app.use(cors());
-
 
 //My Routes
 app.use("/api", authRoutes);
@@ -43,13 +42,12 @@ app.use("/api", userRoutes);
 app.use("/api", categoryRoutes);
 app.use("/api", productRoutes);
 app.use("/api", orderRoutes);
-
+app.use("/api", stripeRoutes);
 
 //Port
 const port = process.env.PORT || 8000;
 
-
 //Starting a server
-app.listen(port, ()=>{
-    console.log(`App is running at ${port}`);
-})
+app.listen(port, () => {
+  console.log(`App is running at ${port}`);
+});
